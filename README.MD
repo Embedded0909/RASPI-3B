@@ -10,15 +10,15 @@ MỤC LỤC
 ## PHẦN 01: GIỚI THIỆU
 
 Thông số kĩ thuật của RASPI 3B
-Hình ảnh:
+Hình ảnh: <br>
 ![alt text](image.png)
-Thông số:
+Thông số: <br>
 ![alt text](image-2.png)
 
-Pinout của RASPI 3B
+Pinout của RASPI 3B <br>
 ![alt text](image-1.png)
 
-Tính năng
+Tính năng <br>
 ```cpp
 - Broadcom BCM2837 64bit ARM Cortex-A53 Quad Core - Processor SoC chạy ở @ 1.2GHz
 - 1 GB RAM
@@ -62,7 +62,7 @@ Thiết bị cần:
 + USB TO TTL CH340
 + Config.txt
 ```
-Video 1: https://youtu.be/G0X2rfaq2ac?si=KLWJzZsvNzv6CizV 
+Video 1: https://youtu.be/G0X2rfaq2ac?si=KLWJzZsvNzv6CizV <br>
 Video 2: https://youtu.be/3C7O6ABCVLo?si=fOzwM1jXLSyOi_dD 
 
 ## PHẦN 03: 
