@@ -65,4 +65,15 @@ Thiết bị cần:
 Video 1: https://youtu.be/G0X2rfaq2ac?si=KLWJzZsvNzv6CizV <br>
 Video 2: https://youtu.be/3C7O6ABCVLo?si=fOzwM1jXLSyOi_dD 
 
-## PHẦN 03: 
+## PHẦN 03: CMD cơ bản VIM
+Setup
+```cpp
+sudo apt update
+sudo apt-get install vim
+```
+```
+Esc +
+:wq: Lưu và thoát
+:set number: Hiện dòng
+:<LINE_NUMBER>: Con trỏ trỏ đến dòng <LINE_NUMBER>
+```
