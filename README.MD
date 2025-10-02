@@ -170,3 +170,40 @@ Một driver trong Linux kernel dùng để ánh xạ thiết bị (hardware/ả
 thành file trong /dev/, cho phép user-space giao tiếp với thiết 
 bị bằng thao tác file (read/write)
 ```
+### 5.1 Struct miscdevice
+Mỗi device file (như /dev/tty0, /dev/sda,..) sẽ gắn với driver cụ thể trong kernel thông qua 
+```
+- Major Number
+- Minor Number
+```
+Major Number = Số định danh driver
+Minor Number = Phân biệt các thiết bị cụ thể
+
+Ví dụ
+```
+Major 8 -> driver SCSI disk (/dev/sda, /dev/sdb…)
+
+Driver SCSI Disk (major 8) quản lý nhiều ổ đĩa:
+
++ /dev/sda → minor 0
++ /dev/sdb → minor 16
++ /dev/sdc → minor 32
+```
+
+⚠️ Khi dùng Struct miscdevice
+```
+Major number chung cho misc devices (10)
+
++ Đăng ký minor number
++ Kernel tự tạo node /dev/<name>
+```
+
+```cpp
+#include <linux/miscdevice.h>
+struct miscdevice  {
+	int minor; // MISC_DYNAMIC_MINOR -> Kernel tự động chọn minor ngẫu nhiên         
+	const char *name; //name trong dev/name
+	const struct file_operations *fops; //con trỏ đến các hàm xử lý sự kiện (open, read,..) 
+	[....]
+};
+```
