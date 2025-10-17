@@ -207,3 +207,67 @@ struct miscdevice  {
 	[....]
 };
 ```
+Code thực tế
+```cpp
+#include <linux/module.h>
+#include <linux/init.h>
+#include <linux/fs.h>
+#include <linux/miscdevice.h>
+#include <linux/gpio.h>
+#include <linux/uaccess.h>
+
+
+static ssize_t myled_write(struct file *filp, const char __user *buf,
+                           size_t count, loff_t *f_pos)
+{
+    char val;
+    if (copy_from_user(&val, buf, 1))
+        return -EFAULT;
+
+    pr_info("myled: LED set to %c\n", val);
+    return count;
+}
+
+static const struct file_operations myled_fops = {
+    .write = myled_write,
+};
+
+static struct miscdevice myled_device = {
+    .minor = MISC_DYNAMIC_MINOR,
+    .name = "myled",
+    .fops = &myled_fops,
+};
+
+static int __init myled_init(void)
+{
+
+    int ret = misc_register(&myled_device);
+    if (ret)
+        pr_err("Failed to register misc device\n");
+    else
+        pr_info("Registered /dev/myled\n");
+    return ret;
+}
+
+static void __exit myled_exit(void)
+{
+    misc_deregister(&myled_device);
+    pr_info("Deregistered /dev/myled\n");
+}
+
+module_init(myled_init);
+module_exit(myled_exit);
+
+MODULE_LICENSE("GPL");
+
+```
+
+```cpp
+obj-m += led_driver.o
+
+all:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+clean:
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+```
