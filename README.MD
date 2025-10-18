@@ -271,3 +271,73 @@ all:
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 ```
+
+## PHẦN 06 GPIO
+
+Thư viện truy cập trên user space
+```
+sudo apt update
+sudo apt install gpiod libgpiod-dev
+
+```
+
+Cụ thể có thể viết function như sau
+```cpp
+#include <gpiod.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#define CONSUMER "MyApp"
+
+int main(void)
+{
+    const char *chipname = "gpiochip0";
+    unsigned int line_num = 17; 
+    struct gpiod_chip *chip;
+    struct gpiod_line *line;
+    int ret;
+
+    chip = gpiod_chip_open_by_name(chipname);
+    if (!chip) {
+        perror("Open chip failed");
+        return 1;
+    }
+
+    line = gpiod_chip_get_line(chip, line_num);
+    if (!line) {
+        perror("Get line failed");
+        gpiod_chip_close(chip);
+        return 1;
+    }
+
+    ret = gpiod_line_request_output(line, CONSUMER, 0);
+    if (ret < 0) {
+        perror("Request line as output failed");
+        gpiod_chip_close(chip);
+        return 1;
+    }
+
+    while(1){
+    printf("Turn LED ON\n");
+    gpiod_line_set_value(line, 1);
+    sleep(1);
+
+    printf("Turn LED OFF\n");
+    gpiod_line_set_value(line, 0);
+
+    sleep(1);
+    }
+
+    gpiod_line_release(line);
+    gpiod_chip_close(chip);
+    return 0;
+}
+
+```
+
+Build chương trình
+```cpp
+gcc -o main blinkled.c -lgpiod
+```
+
+
