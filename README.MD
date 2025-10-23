@@ -339,5 +339,62 @@ Build chương trình
 ```cpp
 gcc -o main blinkled.c -lgpiod
 ```
+## PHẦN 07 I2C
 
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/i2c-dev.h>
 
+#define DS3231_ADDR 0x68
+
+// BCD to Dec
+int bcd_to_dec(uint8_t val) {
+    return ((val / 16 * 10) + (val % 16));
+}
+
+int main() {
+    int fd;
+    char *filename = "/dev/i2c-1";
+
+    // Open I2C bus
+    if ((fd = open(filename, O_RDWR)) < 0) {
+        perror("Cant open /dev/i2c-1");
+        exit(1);
+    }
+
+    // Choose device
+    if (ioctl(fd, I2C_SLAVE, DS3231_ADDR) < 0) {
+        perror("Không chọn được DS3231");
+        exit(1);
+    }
+
+    // Address start (0x00)
+    uint8_t reg = 0x00;
+    write(fd, &reg, 1);
+
+    uint8_t data[7];
+    if (read(fd, data, 7) != 7) {
+        perror("Err read DS3231");
+        exit(1);
+    }
+
+    int second = bcd_to_dec(data[0] & 0x7F);
+    int minute = bcd_to_dec(data[1]);
+    int hour   = bcd_to_dec(data[2] & 0x3F);
+    int day    = bcd_to_dec(data[4]);
+    int month  = bcd_to_dec(data[5] & 0x1F);
+    int year   = bcd_to_dec(data[6]) + 2000;
+
+    printf("Time: %02d:%02d:%02d %02d/%02d/%d\n",
+           hour, minute, second, day, month, year);
+
+    close(fd);
+    return 0;
+}
+
+```
