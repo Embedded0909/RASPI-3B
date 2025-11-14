@@ -398,3 +398,127 @@ int main() {
 }
 
 ```
+TEST
+```cpp
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtCharts 2.3     // Chart hỗ trợ Qt 5 và Qt 6
+
+ApplicationWindow {
+    visible: true
+    width: 600
+    height: 400
+    title: "IoT Dashboard"
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#ECEFF1"   // background nhạt
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 20
+
+            RowLayout {
+                spacing: 20
+
+                // --- Card Nhiệt độ ---
+                Rectangle {
+                    color: "white"
+                    radius: 12
+                    width: 180
+                    height: 120
+                    border.color: "#ccc"
+
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 5
+
+                        Text {
+                            text: "Temperature"
+                            font.pixelSize: 16
+                            color: "#607D8B"
+                        }
+
+                        Text {
+                            text: "28.5 °C"
+                            font.pixelSize: 28
+                            font.bold: true
+                            color: "#E53935"
+                        }
+                    }
+                }
+
+                // --- Card Độ ẩm ---
+                Rectangle {
+                    color: "white"
+                    radius: 12
+                    width: 180
+                    height: 120
+                    border.color: "#ccc"
+
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 5
+
+                        Text {
+                            text: "Humidity"
+                            font.pixelSize: 16
+                            color: "#607D8B"
+                        }
+
+                        Text {
+                            text: "62 %"
+                            font.pixelSize: 28
+                            font.bold: true
+                            color: "#1E88E5"
+                        }
+                    }
+                }
+            }
+
+            // --- Biểu đồ ---
+            ChartView {
+                id: chart
+                height: 180
+                antialiasing: true
+                backgroundColor: "white"
+                title: "Temperature Trend"
+
+                LineSeries {
+                    id: series
+                    name: "Temp"
+                    color: "#E53935"
+
+                    XYPoint { x: 0;  y: 28 }
+                    XYPoint { x: 1;  y: 29 }
+                    XYPoint { x: 2;  y: 28.5 }
+                    XYPoint { x: 3;  y: 30 }
+                    XYPoint { x: 4;  y: 29 }
+                    XYPoint { x: 5;  y: 28.7 }
+                }
+
+                ValueAxis {
+                    id: axisX
+                    min: 0
+                    max: 5
+                    tickCount: 6
+                }
+
+                ValueAxis {
+                    id: axisY
+                    min: 25
+                    max: 35
+                }
+
+                axes: [
+                    AxisPair { axis: axisX; series: series },
+                    AxisPair { axis: axisY; series: series }
+                ]
+            }
+        }
+    }
+}
+
+```
