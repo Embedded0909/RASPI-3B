@@ -503,4 +503,39 @@ Component {
 
 pragma ComponentBehavior: Bound
 
+
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+Rectangle {
+    id: root
+    width: 100
+    height: 100
+    radius: 10
+    color: "#2D2F31"
+    border.color: "#555"
+    border.width: 1
+
+    property string title: ""
+    property string value: ""
+
+    Column {
+        anchors.centerIn: parent
+        spacing: 6
+
+        Text {
+            text: root.title
+            font.pixelSize: 14
+            color: "white"
+        }
+
+        Text {
+            text: root.value
+            font.pixelSize: 20
+            font.bold: true
+            color: "#00E6B8"
+        }
+    }
+}
+
 ```
