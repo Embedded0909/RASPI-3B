@@ -398,127 +398,109 @@ int main() {
 }
 
 ```
-TEST
+SẢN PHẨM CUỐI KHÓA 
 ```cpp
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtCharts 2.3     // Chart hỗ trợ Qt 5 và Qt 6
-
 ApplicationWindow {
     visible: true
-    width: 600
-    height: 400
-    title: "IoT Dashboard"
+    width: 400
+    height: 500
+    title: "Sensor Dashboard"
 
-    Rectangle {
+    ColumnLayout {
         anchors.fill: parent
-        color: "#ECEFF1"   // background nhạt
+        anchors.margins: 20
+        spacing: 20
 
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 20
-            spacing: 20
+        // TEMPERATURE 
+        Text {
+            text: "Nhiệt độ (°C)"
+            font.pixelSize: 22
+            font.bold: true
+        }
 
-            RowLayout {
-                spacing: 20
+        RowLayout {
+            spacing: 15
 
-                // --- Card Nhiệt độ ---
-                Rectangle {
-                    color: "white"
-                    radius: 12
-                    width: 180
-                    height: 120
-                    border.color: "#ccc"
-
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 5
-
-                        Text {
-                            text: "Temperature"
-                            font.pixelSize: 16
-                            color: "#607D8B"
-                        }
-
-                        Text {
-                            text: "28.5 °C"
-                            font.pixelSize: 28
-                            font.bold: true
-                            color: "#E53935"
-                        }
-                    }
-                }
-
-                // --- Card Độ ẩm ---
-                Rectangle {
-                    color: "white"
-                    radius: 12
-                    width: 180
-                    height: 120
-                    border.color: "#ccc"
-
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 5
-
-                        Text {
-                            text: "Humidity"
-                            font.pixelSize: 16
-                            color: "#607D8B"
-                        }
-
-                        Text {
-                            text: "62 %"
-                            font.pixelSize: 28
-                            font.bold: true
-                            color: "#1E88E5"
-                        }
-                    }
-                }
+            SensorCard {
+                title: "Sensor 1"
+                value: "28.5 °C"
             }
 
-            // --- Biểu đồ ---
-            ChartView {
-                id: chart
-                height: 180
-                antialiasing: true
-                backgroundColor: "white"
-                title: "Temperature Trend"
+            SensorCard {
+                title: "Sensor 2"
+                value: "29.1 °C"
+            }
 
-                LineSeries {
-                    id: series
-                    name: "Temp"
-                    color: "#E53935"
+            SensorCard {
+                title: "Sensor 3"
+                value: "30.0 °C"
+            }
+        }
 
-                    XYPoint { x: 0;  y: 28 }
-                    XYPoint { x: 1;  y: 29 }
-                    XYPoint { x: 2;  y: 28.5 }
-                    XYPoint { x: 3;  y: 30 }
-                    XYPoint { x: 4;  y: 29 }
-                    XYPoint { x: 5;  y: 28.7 }
-                }
+        // HUMIDITY SE
+        Text {
+            text: "Độ ẩm (%)"
+            font.pixelSize: 22
+            font.bold: true
+            topPadding: 20
+        }
 
-                ValueAxis {
-                    id: axisX
-                    min: 0
-                    max: 5
-                    tickCount: 6
-                }
+        RowLayout {
+            spacing: 15
 
-                ValueAxis {
-                    id: axisY
-                    min: 25
-                    max: 35
-                }
+            SensorCard {
+                title: "Sensor 1"
+                value: "60 %"
+            }
 
-                axes: [
-                    AxisPair { axis: axisX; series: series },
-                    AxisPair { axis: axisY; series: series }
-                ]
+            SensorCard {
+                title: "Sensor 2"
+                value: "63 %"
+            }
+
+            SensorCard {
+                title: "Sensor 3"
+                value: "65 %"
             }
         }
     }
 }
+
+
+Component {
+    id: sensorCardComponent
+
+    Rectangle {
+        width: 100
+        height: 100
+        radius: 10
+        color: "#2D2F31"
+        border.color: "#555"
+        border.width: 1
+
+        Column {
+            anchors.centerIn: parent
+            spacing: 6
+
+            Text {
+                text: title
+                font.pixelSize: 14
+                color: "white"
+            }
+
+            Text {
+                text: value
+                font.pixelSize: 20
+                font.bold: true
+                color: "#00E6B8"
+            }
+        }
+    }
+}
+
+pragma ComponentBehavior: Bound
 
 ```
