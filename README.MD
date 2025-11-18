@@ -604,41 +604,43 @@ Rectangle {
 TEST
 ```
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 
-Window {
+ApplicationWindow {
     width: 400
     height: 400
     visible: true
     title: "Move Box"
 
-    Rectangle {
-        id: box
-        width: 40
-        height: 40
-        color: "red"
-        x: 180
-        y: 180
-    }
+    // Không đặt focus ở đây — ApplicationWindow KHÔNG có property "focus"
 
-    // BẮT PHÍM
-    focus: true
-    Keys.onPressed: {
-        switch (event.key) {
-        case Qt.Key_Left:
-            box.x -= 10
-            break
-        case Qt.Key_Right:
-            box.x += 10
-            break
-        case Qt.Key_Up:
-            box.y -= 10
-           break
-        case Qt.Key_Down:
-            box.y += 10
-            break
+    Item {
+        id: game
+        anchors.fill: parent
+
+        focus: true        // ✔ ĐƯỢC
+        Keys.enabled: true // ✔ ĐƯỢC
+
+        Rectangle {
+            id: box
+            width: 40
+            height: 40
+            color: "red"
+            x: 180
+            y: 180
+        }
+
+        Keys.onPressed: {
+            switch (event.key) {
+            case Qt.Key_Left:  box.x -= 10; break;
+            case Qt.Key_Right: box.x += 10; break;
+            case Qt.Key_Up:    box.y -= 10; break;
+            case Qt.Key_Down:  box.y += 10; break;
+            }
         }
     }
 }
+
 
 ```
