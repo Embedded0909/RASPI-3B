@@ -611,36 +611,83 @@ ApplicationWindow {
     width: 400
     height: 400
     visible: true
-    title: "Move Box"
-
-    // Không đặt focus ở đây — ApplicationWindow KHÔNG có property "focus"
+    title: "Mini Shooter"
 
     Item {
         id: game
         anchors.fill: parent
-
-        focus: true        // ✔ ĐƯỢC
-        Keys.enabled: true // ✔ ĐƯỢC
+        focus: true
+        Keys.enabled: true
 
         Rectangle {
-            id: box
+            id: player
             width: 40
             height: 40
             color: "red"
-            x: 180
-            y: 180
+            x: (parent.width - width) / 2
+            y: parent.height - height - 10
+        }
+
+        // --- Đạn (ẩn lúc đầu) ---
+        Rectangle {
+            id: bullet
+            width: 8
+            height: 16
+            color: "yellow"
+            visible: false
+        }
+
+        Timer {
+            id: bulletTimer
+            interval: 16   // 60fps
+            repeat: true
+            running: false
+
+            onTriggered: {
+                bullet.y -= 8
+
+                // Nếu bay ra khỏi màn → tắt
+                if (bullet.y + bullet.height < 0) {
+                    bulletTimer.stop()
+                    bullet.visible = false
+                }
+            }
         }
 
         Keys.onPressed: {
             switch (event.key) {
-            case Qt.Key_Left:  box.x -= 10; break;
-            case Qt.Key_Right: box.x += 10; break;
-            case Qt.Key_Up:    box.y -= 10; break;
-            case Qt.Key_Down:  box.y += 10; break;
+
+            // ----- DI CHUYỂN -----
+            case Qt.Key_Left:
+                player.x = Math.max(0, player.x - 10)   // Giới hạn bên trái
+                break;
+
+            case Qt.Key_Right:
+                player.x = Math.min(parent.width - player.width, player.x + 10)  // Giới hạn bên phải
+                break;
+
+            case Qt.Key_Up:
+                player.y = Math.max(0, player.y - 10)
+                break;
+
+            case Qt.Key_Down:
+                player.y = Math.min(parent.height - player.height, player.y + 10)
+                break;
+
+            // ----- BẮN ĐẠN -----
+            case Qt.Key_Space:
+                if (!bullet.visible) {   // Chỉ bắn khi viên trước biến mất
+                    bullet.visible = true
+                    bullet.x = player.x + player.width/2 - bullet.width/2
+                    bullet.y = player.y - bullet.height
+                    bulletTimer.start()
+                }
+                break;
             }
         }
     }
 }
+
 
 
 ```
