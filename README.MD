@@ -398,7 +398,100 @@ int main() {
 }
 
 ```
+## PHẦN 08 QT DESIGN
+
+### 8.1 BUTTON - CONSOLE.LOG
+```cpp
+Button {
+    text: "Click Me"
+    anchors.centerIn: parent
+    onClicked: {
+        console.log("Button clicked!")
+    }
+}
+```
+### 8.2 INPUT - CHANGEEDIT
+```cpp
+
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 200
+    title: "Input & Button"
+
+    Column {
+        anchors.centerIn: parent
+        spacing: 20
+
+        Text {
+            text: "Nhập tên của bạn:"
+            font.pixelSize: 16
+        }
+
+      
+        TextInput {
+            id: nameInput
+            width: 200
+            height: 30
+            font.pixelSize: 16
+            placeholderText: "Nhập tên"
+            focus: true
+            selectByMouse: true
+            Rectangle { anchors.fill: parent; color: "#f0f0f0"; radius: 5 } 
+        }
+
+
+        Button {
+            text: "Đăng ký"
+            onClicked: {
+                console.log("Tên bạn vừa nhập: " + nameInput.text)
+                resultText.text = "Bạn vừa nhập: " + nameInput.text
+            }
+        }
+
+     
+        Text {
+            id: resultText
+            text: ""
+            font.pixelSize: 16
+            color: "blue"
+        }
+    }
+}
+```
+### 8.3 Rectangle
+```cpp
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 300
+    title: "Rectangle Demo"
+
+    Rectangle {
+        width: 200
+        height: 100
+        color: "lightblue"
+        radius: 10         
+        border.color: "blue"
+        border.width: 2
+        anchors.centerIn: parent
+
+        Text {
+            anchors.centerIn: parent
+            text: "Hello Rectangle"
+            font.pixelSize: 16
+            color: "white"
+        }
+    }
+}
+```
+
 SẢN PHẨM CUỐI KHÓA 
+
+
+![alt text](image-4.png)
+
+
 ```cpp
 import QtQuick 2.15
 import QtQuick.Controls 2.15
@@ -470,38 +563,7 @@ ApplicationWindow {
 }
 
 
-Component {
-    id: sensorCardComponent
-
-    Rectangle {
-        width: 100
-        height: 100
-        radius: 10
-        color: "#2D2F31"
-        border.color: "#555"
-        border.width: 1
-
-        Column {
-            anchors.centerIn: parent
-            spacing: 6
-
-            Text {
-                text: title
-                font.pixelSize: 14
-                color: "white"
-            }
-
-            Text {
-                text: value
-                font.pixelSize: 20
-                font.bold: true
-                color: "#00E6B8"
-            }
-        }
-    }
-}
-
-pragma ComponentBehavior: Bound
+// Component 
 
 
 import QtQuick 2.15
